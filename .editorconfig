@@ -1,0 +1,19 @@
+# Copyright by Timon Kreis - All Rights Reserved
+# Visit https://www.timonkreis.de/
+#
+# @see http://editorconfig.org/
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 4
+indent_style = tab
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+ij_visual_guides = 120
+
+[*.md]
+trim_trailing_whitespace = false

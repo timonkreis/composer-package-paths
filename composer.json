@@ -1,0 +1,33 @@
+{
+	"name": "timonkreis/composer-package-paths",
+	"description": "Composer plugin to configure paths for composer package types.",
+	"type": "composer-plugin",
+	"readme": "README.md",
+	"authors": [
+		{
+			"name": "Timon Kreis",
+			"email": "mail@timonkreis.de",
+			"homepage": "https://www.timonkreis.de/",
+			"role": "Developer"
+		}
+	],
+	"keywords": [
+		"composer",
+		"package",
+		"paths",
+		"installer"
+	],
+	"require": {
+		"php": ">=7.2.0",
+		"composer-plugin-api": "^1.1",
+		"composer/installers": "^1.0"
+	},
+	"extra": {
+		"class": "TimonKreis\\Composer\\PackagePaths\\Plugin"
+	},
+	"autoload": {
+		"psr-4": {
+			"TimonKreis\\Composer\\PackagePaths\\": "src"
+		}
+	}
+}
