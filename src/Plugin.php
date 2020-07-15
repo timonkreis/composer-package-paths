@@ -15,6 +15,8 @@ use Composer;
 class Plugin implements Composer\Plugin\PluginInterface
 {
 	/**
+	 * Add the installer
+	 *
 	 * @param Composer\Composer $composer
 	 * @param Composer\IO\IOInterface $io
 	 */
