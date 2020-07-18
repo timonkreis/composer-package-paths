@@ -24,8 +24,22 @@ class Installer extends Composer\Installers\Installer
 	{
 		[$vendor, $name] = explode('/', $package->getName(), 2);
 
+		if ($this->getPackagePaths()[$package->getName()] ?? false) {
+			// Package is targeted directly
+			$path = $this->getPackagePaths()[$package->getName()];
+		} elseif ($this->getPackagePaths()[$vendor . '/*'] ?? false) {
+			// Package is targeted by vendor + wildcard
+			$path = $this->getPackagePaths()[$vendor . '/*'];
+		} elseif ($this->getPackagePaths()[$package->getType()] ?? false) {
+			// Package is targeted by package type
+			$path = $this->getPackagePaths()[$package->getType()];
+		} else {
+			// Package is not targeted (choose default vendor directory)
+			$path = $this->composer->getConfig()->get('vendor-dir') . '/{$vendor}/{$name}';
+		}
+
 		return strtr(
-			$this->getPackagePaths()[$package->getType()],
+			$path,
 			[
 				'{$vendor}' => $vendor,
 				'{$name}' => $name,
@@ -41,11 +55,30 @@ class Installer extends Composer\Installers\Installer
 	 */
 	public function supports($packageType) : bool
 	{
+		// Check if any package is potentially targeted directly
+		foreach ($this->getPackagePaths() as $package => $path) {
+			if (strpos($package, '/')) {
+				return true;
+			}
+		}
+
 		return array_key_exists($packageType, $this->getPackagePaths());
 	}
 
 	/**
 	 * Get the list of configured paths from `composer.json`
+	 *   Definition:
+	 *   {
+	 *       ...
+	 * 	     "extra": {
+	 *           "package-paths": {
+	 *               "my-first-package-type": "my/custom/path",
+	 *               "my-second-package-type": "another/custom/path/{$vendor}/{$name}",
+	 *               "my-vendor/*": "my/wildcard/path"
+	 *           }
+	 *       }
+	 *       ...
+	 *   }
 	 *
 	 * @return array
 	 */
